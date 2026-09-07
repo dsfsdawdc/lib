@@ -1,4 +1,40 @@
+# Environment and credentials
+.env
+.env.*
+!.env.example
+
+# Virtual environments
 .venv/
+venv/
+env/
+
+# Python bytecode and caches
 __pycache__/
 *.py[cod]
-.env
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.pyright/
+
+# Test and coverage reports
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+pytest.xml
+
+# Local databases and application state
+*.sqlite
+*.sqlite3
+*.db
+instance/
+
+# Logs and local runtime output
+*.log
+logs/
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
