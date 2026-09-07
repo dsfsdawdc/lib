@@ -1,6 +1,6 @@
 USE dblib;
 
--- Demo login password for every seeded account: Library123!
+
 INSERT IGNORE INTO users (id, username, password_hash, full_name, email, role, status, approved_by, approved_at) VALUES
 (1, 'admin.demo', 'scrypt:32768:8:1$9AyVMf7cIxGWfFg7$201cec27a812b2bfeb1651d103c2d440a777f978a15d01a333235bd4beb922ad23744ac9acb6ed85b9a74c39e3f971778e864cd0a531d13b361f6ec9f517a7e5', 'Amina Okafor', 'amina.admin@example.com', 'admin', 'active', NULL, NULL),
 (2, 'staff.demo', 'scrypt:32768:8:1$9AyVMf7cIxGWfFg7$201cec27a812b2bfeb1651d103c2d440a777f978a15d01a333235bd4beb922ad23744ac9acb6ed85b9a74c39e3f971778e864cd0a531d13b361f6ec9f517a7e5', 'Jon Bell', 'jon.staff@example.com', 'staff', 'active', 1, NOW()),
