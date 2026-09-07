@@ -1,0 +1,836 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap');
+
+/* =========================
+   ROOT & GLOBAL
+   ========================= */
+
+:root {
+    --ink: #17221f;
+    --muted: #687772;
+    --line: #dce5df;
+    --paper: #f5f7f2;
+    --white: #fff;
+    --green: #176b58;
+    --green-dark: #0d493c;
+    --lime: #d8e969;
+    --red: #b84b43;
+    --shadow: 0 18px 50px rgba(23, 34, 31, .08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 14px 'DM Sans', sans-serif;
+}
+
+a {
+    color: var(--green);
+    text-decoration: none;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+/* =========================
+   TOP BAR
+   ========================= */
+
+.topbar {
+    height: 72px;
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 34px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.brand-mark {
+    background: var(--green);
+    color: var(--lime);
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    font-size: 11px;
+    letter-spacing: .5px;
+}
+
+.brand-mark.large {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+}
+
+.account {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.role-badge {
+    color: var(--green);
+    background: #e5f0e8;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 11px;
+    text-transform: capitalize;
+}
+
+.link-button {
+    border: 0;
+    background: none;
+    color: var(--green);
+    padding: 0;
+}
+
+
+/* =========================
+   MAIN LAYOUT
+   ========================= */
+
+.shell {
+    display: flex;
+    min-height: calc(100vh - 72px);
+}
+
+.sidebar {
+    width: 235px;
+    border-right: 1px solid var(--line);
+    padding: 34px 24px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.main-content {
+    /*
+       Removed the old max-width: 1250px restriction.
+       This allows the content area to use the available
+       horizontal space.
+    */
+    width: 100%;
+    max-width: none;
+    padding: 48px 4%;
+}
+
+
+/* =========================
+   SIDEBAR
+   ========================= */
+
+.eyebrow {
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+}
+
+.sidebar nav {
+    display: grid;
+    gap: 5px;
+}
+
+.sidebar nav a {
+    padding: 12px 13px;
+    color: var(--muted);
+    border-radius: 8px;
+}
+
+.sidebar nav a:hover {
+    background: #e8efe9;
+    color: var(--green);
+}
+
+.sidebar nav a.active {
+    background: #e8efe9;
+    color: var(--green);
+    font-weight: 600;
+}
+
+.sidebar-note {
+    margin-top: auto;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    display: grid;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+.sidebar-note strong {
+    color: var(--ink);
+}
+
+
+/* =========================
+   PAGE HEADINGS
+   ========================= */
+
+.page-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 34px;
+}
+
+.page-heading h1,
+.login-intro h1 {
+    font: 600 44px/1.03 Newsreader, serif;
+    letter-spacing: 0;
+    margin: 0 0 10px;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.small {
+    font-size: 12px;
+}
+
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+.primary-button,
+.small-button {
+    background: var(--green);
+    border: 0;
+    border-radius: 7px;
+    color: white;
+    padding: 11px 17px;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.primary-button:hover,
+.small-button:hover {
+    background: var(--green-dark);
+}
+
+.small-button {
+    font-size: 12px;
+    padding: 7px 11px;
+}
+
+.small-button.danger {
+    background: #f5dfdd;
+    color: var(--red);
+}
+
+.action-row {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+
+/* =========================
+   DASHBOARD METRICS
+   ========================= */
+
+.metric-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 42px;
+}
+
+.metric {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    display: grid;
+    gap: 10px;
+}
+
+.metric span,
+.metric small {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.metric strong {
+    font: 600 35px Newsreader, serif;
+}
+
+.metric.alert strong {
+    color: var(--red);
+}
+
+
+/* =========================
+   CONTENT SECTIONS
+   ========================= */
+
+.content-section {
+    margin-top: 22px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 15px;
+}
+
+.section-heading h2,
+.form-card h2 {
+    font: 600 26px Newsreader, serif;
+    margin: 0;
+}
+
+.split-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+}
+
+
+/* =========================
+   FORMS
+   ========================= */
+
+.form-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px;
+    width: 260px;
+    flex: none;
+}
+
+.form-card form,
+.login-panel form {
+    display: grid;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+label {
+    display: grid;
+    gap: 7px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fbfcfa;
+    padding: 10px;
+    color: var(--ink);
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px #dcefe6;
+}
+
+textarea {
+    font: inherit;
+    resize: vertical;
+}
+
+
+/* =========================
+   TABLES - GENERAL
+   ========================= */
+
+.table-wrap {
+    width: 100%;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+.table-wrap.grow {
+    flex: 1;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: left;
+}
+
+th {
+    background: #f7f9f6;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+th,
+td {
+    padding: 16px 18px;
+    border-bottom: 1px solid #edf1ed;
+    white-space: nowrap;
+}
+
+tbody tr:last-child td {
+    border: 0;
+}
+
+
+/* =========================
+   CORRECTION REPORTS TABLE
+   ========================= */
+
+.correction-reports-table {
+    width: 100%;
+    min-width: 1100px;
+    table-layout: auto;
+}
+
+/*
+   Give the important columns enough space.
+   The table can expand beyond the viewport and
+   .table-wrap will provide horizontal scrolling.
+*/
+
+.correction-reports-table th:nth-child(1),
+.correction-reports-table td:nth-child(1) {
+    min-width: 130px;
+}
+
+.correction-reports-table th:nth-child(2),
+.correction-reports-table td:nth-child(2) {
+    min-width: 180px;
+}
+
+.correction-reports-table th:nth-child(3),
+.correction-reports-table td:nth-child(3) {
+    min-width: 150px;
+}
+
+.correction-reports-table th:nth-child(4),
+.correction-reports-table td:nth-child(4) {
+    min-width: 140px;
+}
+
+.correction-reports-table th:nth-child(5),
+.correction-reports-table td:nth-child(5) {
+    min-width: 150px;
+}
+
+.correction-reports-table th:nth-child(6),
+.correction-reports-table td:nth-child(6) {
+    min-width: 120px;
+}
+
+.correction-reports-table th:nth-child(7),
+.correction-reports-table td:nth-child(7) {
+    min-width: 140px;
+}
+
+.correction-reports-table th:nth-child(8),
+.correction-reports-table td:nth-child(8) {
+    min-width: 250px;
+}
+
+
+/* =========================
+   BOOK CATALOGUE TABLE
+   ========================= */
+
+.book-catalogue-table {
+    width: 100%;
+    min-width: 820px;
+}
+
+.book-catalogue-table th:nth-child(1),
+.book-catalogue-table td:nth-child(1) {
+    min-width: 220px;
+}
+
+.book-catalogue-table th:nth-child(4),
+.book-catalogue-table td:nth-child(4) {
+    min-width: 170px;
+}
+
+.book-title {
+    min-width: 220px;
+    white-space: normal;
+}
+
+.book-title .muted {
+    display: block;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+
+/* =========================
+   TRANSACTIONS TABLE
+   ========================= */
+
+.transactions-table {
+    width: 100%;
+    min-width: 820px;
+}
+
+.transactions-table th:nth-child(2),
+.transactions-table td:nth-child(2) {
+    min-width: 180px;
+}
+
+.transactions-table th:nth-child(6),
+.transactions-table td:nth-child(6) {
+    min-width: 130px;
+}
+
+
+/* =========================
+   TABLE CONTENT
+   ========================= */
+
+.table-wrap th,
+.table-wrap td {
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================
+   STATUS
+   ========================= */
+
+.status {
+    border-radius: 20px;
+    background: #e8f2eb;
+    color: var(--green);
+    padding: 5px 9px;
+    font-size: 11px;
+    text-transform: capitalize;
+}
+
+.status.pending,
+.status.borrowed {
+    background: #fff4d6;
+    color: #8a640c;
+}
+
+.status.declined,
+.status.suspended,
+.status.overdue {
+    background: #f8e4e1;
+    color: var(--red);
+}
+
+
+/* =========================
+   EMPTY STATE
+   ========================= */
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 35px !important;
+}
+
+
+/* =========================
+   FLASH MESSAGES
+   ========================= */
+
+.flash-stack {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.flash {
+    border-radius: 7px;
+    padding: 12px 15px;
+}
+
+.flash.success {
+    background: #e6f2e9;
+    color: var(--green);
+}
+
+.flash.error {
+    background: #f8e4e1;
+    color: var(--red);
+}
+
+
+/* =========================
+   PAGINATION
+   ========================= */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 14px;
+}
+
+.pagination a {
+    min-width: 32px;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    text-align: center;
+    color: var(--green);
+    background: var(--white);
+}
+
+.pagination a.current {
+    background: var(--green);
+    color: var(--white);
+    border-color: var(--green);
+}
+
+
+/* =========================
+   CATALOGUE SEARCH
+   ========================= */
+
+.catalogue-search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+    max-width: 760px;
+}
+
+.catalogue-search input {
+    flex: 1;
+}
+
+
+/* =========================
+   MANAGE CATALOGUE
+   ========================= */
+
+.manage-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.wide-form {
+    max-width: 560px;
+}
+
+.wide-form form {
+    display: grid;
+    gap: 15px;
+}
+
+
+/* =========================
+   LOGIN
+   ========================= */
+
+.auth-main {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 30px;
+}
+
+.login-layout {
+    max-width: 940px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 80px;
+    align-items: center;
+}
+
+.login-intro {
+    padding: 20px;
+}
+
+.login-intro p:not(.eyebrow) {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 410px;
+}
+
+.login-panel {
+    background: var(--white);
+    padding: 36px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.login-panel h2 {
+    font: 600 30px Newsreader, serif;
+    margin: 22px 0 7px;
+}
+
+.login-panel .primary-button {
+    margin-top: 5px;
+    width: 100%;
+}
+
+
+/* =========================
+   TABLET
+   ========================= */
+
+@media (max-width: 850px) {
+
+    .sidebar {
+        width: 190px;
+    }
+
+    .main-content {
+        padding: 35px 25px;
+    }
+
+    .metric-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .login-layout {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        max-width: 500px;
+    }
+
+    .login-intro {
+        padding: 0;
+    }
+
+    .split-section {
+        display: block;
+    }
+
+    .form-card {
+        width: auto;
+        margin-bottom: 22px;
+    }
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 600px) {
+
+    .topbar {
+        padding: 0 18px;
+    }
+
+    .account > span:first-child {
+        display: none;
+    }
+
+    .shell {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding: 15px 18px;
+    }
+
+    .sidebar .eyebrow,
+    .sidebar-note {
+        display: none;
+    }
+
+    .sidebar nav {
+        display: flex;
+        overflow: auto;
+    }
+
+    .sidebar nav a {
+        white-space: nowrap;
+    }
+
+    .main-content {
+        padding: 30px 17px;
+    }
+
+    .page-heading {
+        display: block;
+    }
+
+    .page-heading .primary-button {
+        margin-top: 18px;
+    }
+
+    .page-heading h1,
+    .login-intro h1 {
+        font-size: 37px;
+    }
+
+    .metric-grid {
+        gap: 8px;
+    }
+
+    .metric {
+        padding: 14px;
+    }
+
+    .metric strong {
+        font-size: 29px;
+    }
+
+    th,
+    td {
+        padding: 13px 12px;
+    }
+
+    .login-panel {
+        padding: 27px;
+    }
+
+    .catalogue-search {
+        display: block;
+    }
+
+    .catalogue-search .primary-button {
+        width: 100%;
+        margin-top: 8px;
+    }
+}
+.input-warning{display:block;margin-top:5px;color:var(--red);font-size:12px}

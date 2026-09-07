@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Catalogue | Civic Shelf{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">{{ 'Collection management' if current_user.role in ['admin', 'staff'] else 'Catalogue access' }}</p>
+        <h1>Book catalogue</h1>
+        <p class="muted">Search by title, author, ISBN, publication year, or publisher.</p>
+    </div>
+</div>
+<form class="catalogue-search" method="get" action="{{ url_for('books') }}">
+    <input name="q" value="{{ search }}" placeholder="Search title, author, ISBN, year, or publisher" aria-label="Search catalogue">
+    <button class="primary-button" type="submit">Search catalogue</button>
+</form>
+{% if current_user.role in ['admin', 'staff'] %}<section class="split-section">
+    <div class="form-card">
+        <p class="eyebrow">New catalogue record</p>
+        <h2>Add a book</h2><form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label>Title<input name="title" required></label>
+            <label>ISBN<input name="isbn" required></label>
+            <label>Author<select name="author_id">
+                <option value="">Select author</option>{% for author in authors %}
+                <option value="{{ author.id }}">{{ author.name }}</option>{% endfor %}
+            </select></label>
+            <label>Publisher<select name="publisher_id">
+                <option value="">Select publisher</option>{% for publisher in publishers %}
+                <option value="{{ publisher.id }}">{{ publisher.name }}</option>{% endfor %}
+            </select></label>
+            <label>Bookshelf<select name="shelf_id">
+                <option value="">Select bookshelf</option>{% for shelf in shelves %}
+                <option value="{{ shelf.id }}">{{ shelf.code }} · {{ shelf.section }}</option>{% endfor %}
+            </select></label>
+            <label>Publication year<input name="publication_year" type="number" min="1000" max="2100"></label>
+            <label>Total physical copies<input name="total_copies" type="number" min="1" value="1" required></label>
+            <button class="primary-button" type="submit">Add to catalogue</button>
+        </form>
+    </div>
+    <div class="table-wrap grow">{% include 'book_table.html' %}{% if pages > 1 %}<nav class="pagination" aria-label="Book pagination">{% for number in range(1, pages + 1) %}<a class="{% if number == page %}current{% endif %}" href="{{ url_for('books', page=number, q=search) }}">{{ number }}</a>{% endfor %}</nav>{% endif %}</div>
+</section>
+{% else %}
+<section class="content-section">
+    <div class="table-wrap">{% include 'book_table.html' %}{% if pages > 1 %}<nav class="pagination" aria-label="Book pagination">{% for number in range(1, pages + 1) %}<a class="{% if number == page %}current{% endif %}" href="{{ url_for('books', page=number, q=search) }}">{{ number }}</a>{% endfor %}</nav>{% endif %}</div>
+</section>
+{% endif %}
+{% endblock %}

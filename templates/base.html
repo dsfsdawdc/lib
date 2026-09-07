@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Civic Shelf{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% if current_user %}
+<header class="topbar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">CS</span><span>Civic Shelf</span></a>
+    <div class="account"><span>{{ current_user.full_name }}</span><span class="role-badge">{{ current_user.role }}</span>
+        <form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="link-button" type="submit">Sign out</button></form>
+    </div>
+</header>
+<div class="shell">
+    <aside class="sidebar">
+        <p class="eyebrow">Library operations</p>
+        <nav>
+            {% if current_user.role != 'member' %}<a class="{% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">Overview</a>{% endif %}
+            <a class="{% if request.endpoint == 'books' %}active{% endif %}" href="{{ url_for('books') }}">Catalogue</a>
+            {% if current_user.role in ['admin', 'staff'] %}<a class="{% if request.endpoint == 'members' %}active{% endif %}" href="{{ url_for('members') }}">Members</a>{% endif %}
+            <a class="{% if request.endpoint in ['requests', 'update_request', 'create_request'] %}active{% endif %}" href="{{ url_for('requests') }}">Requests</a>
+            {% if current_user.role in ['admin', 'staff'] %}<a class="{% if request.endpoint in ['transactions', 'update_transaction'] %}active{% endif %}" href="{{ url_for('transactions') }}">Borrowing transactions</a>{% endif %}
+            {% if current_user.role == 'admin' %}<a class="{% if request.endpoint in ['staff', 'update_staff'] %}active{% endif %}" href="{{ url_for('staff') }}">Staff approvals</a>{% endif %}
+            {% if current_user.role in ['staff', 'member'] %}<a class="{% if request.endpoint == 'account' %}active{% endif %}" href="{{ url_for('account') }}">Account settings</a>{% endif %}
+            {% if current_user.role == 'admin' %}<a class="{% if request.endpoint in ['correction_reports', 'update_correction_report'] %}active{% endif %}" href="{{ url_for('correction_reports') }}">Correction reports</a>{% endif %}
+            {% if current_user.role in ['admin', 'staff'] %}<a class="{% if request.endpoint in ['manage_catalogue', 'edit_catalogue_item', 'create_correction_report'] %}active{% endif %}" href="{{ url_for('manage_catalogue') }}">Manage catalogue</a>{% endif %}
+        </nav>
+        <div class="sidebar-note"><strong>{{ current_user.role|capitalize }} workspace</strong><span>Every action is recorded for accountability.</span></div>
+    </aside>
+    <main class="main-content">
+{% else %}
+<main class="auth-main">
+{% endif %}
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+{% block content %}{% endblock %}
+{% if current_user %}</main></div>{% else %}</main>{% endif %}
+<script>
+document.addEventListener('input', function (event) {
+    const input = event.target.closest('[data-username-check]');
+    if (!input) return;
+    const warning = input.parentElement.querySelector('[data-username-warning]');
+    if (!warning || !input.value.trim()) {
+        if (warning) warning.hidden = true;
+        input.setCustomValidity('');
+        return;
+    }
+    fetch('{{ url_for("username_availability") }}?username=' + encodeURIComponent(input.value.trim()))
+        .then(response => response.json())
+        .then(data => {
+            warning.hidden = data.available;
+            input.setCustomValidity(data.available ? '' : 'This username already exists.');
+        });
+});
+</script>
+</body>
+</html>

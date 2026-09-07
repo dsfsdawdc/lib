@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Members | Civic Shelf{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">Member services</p>
+        <h1>Library members</h1>
+        <p class="muted">Register and keep member accounts in good standing.</p>
+    </div>
+</div>
+<section class="split-section">
+    <div class="form-card">
+        <p class="eyebrow">New member</p>
+        <h2>Register</h2>
+        <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label>Full name
+                <input name="full_name" required>
+            </label>
+            <label>Username
+                <input name="username" data-username-check required>
+            </label>
+            <label>Temporary password
+                <input name="password" type="password" required>
+            </label>
+            <label>Membership no.
+                <input name="membership_no" value="{{ next_membership_no }}" readonly>
+            </label>
+            <label>Email
+                <input name="email" type="email">
+            </label>
+            <label>Phone
+                <input name="phone">
+            </label>
+            <label>Address
+                <input name="address">
+            </label>
+            <button class="primary-button" type="submit">Register member</button>
+        </form>
+    </div>
+    <div class="table-wrap grow">
+        <table>
+            <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Membership no.</th>
+                    <th>Username</th>
+                    <th>Joined</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                <tr>
+                    <td><strong>{{ member.full_name }}</strong></td>
+                    <td>{{ member.membership_no }}</td>
+                    <td>{{ member.username }}</td>
+                    <td>{{ member.joined_at }}</td>
+                    <td><span class="status {{ member.status }}">{{ member.status }}</span></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="empty">No members registered yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% with param='page' %}{% include '_pagination.html' %}{% endwith %}
+</section>
+{% endblock %}

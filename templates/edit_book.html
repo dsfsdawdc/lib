@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Edit book | Civic Shelf{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">Catalogue management</p>
+        <h1>Edit book</h1>
+        <p class="muted">Update catalogue details and physical copy availability.</p>
+    </div>
+</div>
+<div class="form-card wide-form">
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Title<input name="title" value="{{ book.title }}" required></label>
+        <label>ISBN<input name="isbn" value="{{ book.isbn }}" required></label>
+        <label>Author<select name="author_id">
+            <option value="">Unassigned</option>
+            {% for author in authors %}
+                <option value="{{ author.id }}" {% if book.author_id == author.id %}selected{% endif %}>{{ author.name }}</option>
+            {% endfor %}
+        </select></label>
+        <label>Publisher<select name="publisher_id">
+            <option value="">Unassigned</option>
+            {% for publisher in publishers %}
+                <option value="{{ publisher.id }}" {% if book.publisher_id == publisher.id %}selected{% endif %}>{{ publisher.name }}</option>
+            {% endfor %}
+        </select></label>
+        <label>Bookshelf<select name="shelf_id">
+            <option value="">Unassigned</option>
+            {% for shelf in shelves %}
+                <option value="{{ shelf.id }}" {% if book.shelf_id == shelf.id %}selected{% endif %}>{{ shelf.code }} · {{ shelf.section }}</option>
+            {% endfor %}
+        </select></label>
+        <label>Publication year<input name="publication_year" type="number" value="{{ book.publication_year or '' }}"></label>
+        <label>Total copies<input name="total_copies" type="number" min="1" value="{{ book.total_copies }}" required></label>
+        <label>Available copies<input name="available_copies" type="number" min="0" max="{{ book.total_copies }}" value="{{ book.available_copies }}" required></label>
+        <div class="action-row">
+            <button class="primary-button" type="submit">Save changes</button>
+            <a class="small-button" href="{{ url_for('books') }}">Cancel</a>
+            {% if current_user.role == 'admin' %}
+                <button class="small-button danger" formaction="{{ url_for('delete_catalogue_item', entity='book', entity_id=book.id) }}" formmethod="post" type="submit" onclick="return confirm('Delete this book? This action cannot be undone.');">Delete book</button>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

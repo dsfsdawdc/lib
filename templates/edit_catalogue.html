@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Edit {{ entity }} | Civic Shelf{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">Administrator controls</p>
+        <h1>Edit {{ entity|capitalize }}</h1>
+        <p class="muted">Update this catalogue record.</p>
+    </div>
+</div>
+<div class="form-card wide-form">
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {% if entity == 'shelf' %}
+            <label>Code<input name="code" value="{{ item.code }}" required></label>
+            <label>Section<input name="section" value="{{ item.section }}" required></label>
+            <label>Description<input name="description" value="{{ item.description or '' }}"></label>
+        {% elif entity == 'publisher' %}
+            <label>Name<input name="name" value="{{ item.name }}" required></label>
+            <label>Email<input name="email" type="email" value="{{ item.email or '' }}"></label>
+            <label>Phone<input name="phone" value="{{ item.phone or '' }}"></label>
+        {% else %}
+            <label>Name<input name="name" value="{{ item.name }}" required></label>
+            <label>Biography<input name="biography" value="{{ item.biography or '' }}"></label>
+        {% endif %}
+        <div class="action-row">
+            <button class="primary-button" type="submit">Save changes</button>
+            <a class="small-button" href="{{ url_for('manage_catalogue') }}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

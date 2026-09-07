@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Account settings | Civic Shelf{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">{{ current_user.role|capitalize }} account</p>
+        <h1>Account settings</h1>
+        <p class="muted">Your username and password can each be changed once. Your email can be updated anytime.</p>
+    </div>
+</div>
+<section class="content-section">
+    <div class="form-card wide-form">
+        <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label>Current password<input name="current_password" type="password" required></label>
+            <label>New username<input name="new_username" data-username-check></label>
+            <label>New password<input name="new_password" type="password"></label>
+            <label>Email<input name="email" type="email" value="{{ current_user.email or '' }}"></label>
+            <button class="primary-button" type="submit">Change credentials</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

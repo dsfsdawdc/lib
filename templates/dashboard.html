@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Overview | Civic Shelf{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">{{ current_user.role }} desk</p>
+        <h1>Good to see you, {{ current_user.full_name.split(' ')[0] }}.</h1>
+        <p class="muted">Here is the pulse of the library today.</p>
+    </div>{% if current_user.role == 'admin' %}<a class="primary-button" href="{{ url_for('books') }}">Add a book</a>{% endif %}
+</div>
+<div class="metric-grid">
+    <div class="metric">
+        <span>Available books</span>
+        <strong>{{ metrics.available_books }}</strong>
+        <small>Ready to circulate</small>
+    </div>
+    <div class="metric">
+        <span>Active members</span>
+        <strong>{{ metrics.active_members }}</strong>
+        <small>In good standing</small>
+    </div>
+    <div class="metric">
+        <span>Pending requests</span>
+        <strong>{{ metrics.pending_requests }}</strong>
+        <small>Need a decision</small>
+    </div>
+    <div class="metric alert">
+        <span>Overdue books</span>
+        <strong>{{ metrics.overdue_books }}</strong>
+        <small>Follow up required</small>
+    </div>
+</div>
+<section class="content-section">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Collection snapshot</p>
+            <h2>Recently catalogued</h2>
+        </div>
+        <a href="{{ url_for('books') if current_user.role in ['admin', 'staff'] else url_for('requests') }}">View more</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>ISBN</th>
+                    <th>Publisher</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in recent_books %}
+                <tr>
+                    <td><strong>{{ book.title }}</strong></td>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.publisher or 'Unassigned' }}</td>
+                    <td><span class="status {{ book.status }}">{{ book.status }}</span></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="empty">No books have been catalogued yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

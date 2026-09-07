@@ -1,0 +1,5 @@
+USE dblib;
+
+ALTER TABLE users
+    ADD COLUMN phone VARCHAR(40) NULL,
+    ADD COLUMN address VARCHAR(255) NULL;

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Sign in | Civic Shelf{% endblock %}
+{% block content %}
+<section class="login-layout">
+    <div class="login-intro">
+        <p class="eyebrow">Local public library</p>
+        <h1>Make every shelf easier to serve.</h1>
+        <p>A focused workspace for the people, books, and decisions behind a welcoming library.</p>
+    </div>
+    <div class="login-panel">
+        <span class="brand-mark large">CS</span>
+        <h2>Welcome back</h2>
+        <p class="muted">Sign in to continue to your workspace.</p>
+        <form method="post" action="{{ url_for('login') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label>Username
+                <input name="username" autocomplete="username" required>
+            </label>
+            <label>Password
+                <input name="password" type="password" autocomplete="current-password" required>
+            </label>
+            <button class="primary-button" type="submit">Sign in</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
