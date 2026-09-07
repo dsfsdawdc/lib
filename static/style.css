@@ -311,6 +311,64 @@ button {
     margin: 0;
 }
 
+.analytics-section {
+    margin-top: 0;
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.chart-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    min-width: 0;
+}
+
+.chart-card-wide {
+    grid-column: span 2;
+}
+
+.chart-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 16px;
+}
+
+.chart-heading h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.chart-heading span {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.chart-canvas {
+    height: 220px;
+    position: relative;
+}
+
+.chart-card-wide .chart-canvas {
+    height: 245px;
+}
+
+.chart-empty {
+    color: var(--muted);
+    display: grid;
+    height: 100%;
+    margin: 0;
+    place-items: center;
+    text-align: center;
+}
+
 .split-section {
     display: flex;
     align-items: flex-start;
@@ -805,6 +863,14 @@ tbody tr:last-child td {
 
     .metric-grid {
         gap: 8px;
+    }
+
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-card-wide {
+        grid-column: auto;
     }
 
     .metric {

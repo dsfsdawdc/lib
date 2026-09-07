@@ -30,6 +30,101 @@
         <small>Follow up required</small>
     </div>
 </div>
+{% if current_user.role == 'admin' %}
+<section class="content-section analytics-section">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Library intelligence</p>
+            <h2>Operational trends</h2>
+        </div>
+        <span class="muted small">Live from circulation records</span>
+    </div>
+    <div class="chart-grid">
+        <article class="chart-card chart-card-wide">
+            <div class="chart-heading"><h3>Borrowing trends</h3><span>Last 6 months</span></div>
+            <div class="chart-canvas"><canvas id="borrowing-trends-chart"></canvas></div>
+        </article>
+        <article class="chart-card">
+            <div class="chart-heading"><h3>Request status</h3><span>All requests</span></div>
+            <div class="chart-canvas"><canvas id="request-status-chart"></canvas></div>
+        </article>
+        <article class="chart-card">
+            <div class="chart-heading"><h3>Inventory status</h3><span>Book records</span></div>
+            <div class="chart-canvas"><canvas id="inventory-status-chart"></canvas></div>
+        </article>
+        <article class="chart-card">
+            <div class="chart-heading"><h3>Most borrowed books</h3><span>Top 5 titles</span></div>
+            <div class="chart-canvas"><canvas id="most-borrowed-chart"></canvas></div>
+        </article>
+        <article class="chart-card">
+            <div class="chart-heading"><h3>Overdue books</h3><span>Past due</span></div>
+            <div class="chart-canvas"><canvas id="overdue-books-chart"></canvas></div>
+        </article>
+        <article class="chart-card">
+            <div class="chart-heading"><h3>Active members</h3><span>Joined last 6 months</span></div>
+            <div class="chart-canvas"><canvas id="active-members-chart"></canvas></div>
+        </article>
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script id="dashboard-chart-data" type="application/json">{{ charts|tojson }}</script>
+<script>
+const dashboardCharts = JSON.parse(document.getElementById('dashboard-chart-data').textContent);
+const chartColors = ['#176b58', '#d8e969', '#e39b5d', '#b84b43', '#5e7b9a', '#9b7561'];
+
+function makeDashboardChart(canvasId, chartType, rows, options = {}) {
+    const canvas = document.getElementById(canvasId);
+    if (!rows.length) {
+        canvas.replaceWith(Object.assign(document.createElement('p'), {
+            className: 'chart-empty',
+            textContent: 'No records to display yet.'
+        }));
+        return;
+    }
+    new Chart(canvas, {
+        type: chartType,
+        data: {
+            labels: rows.map(row => row.label),
+            datasets: [{
+                data: rows.map(row => row.total),
+                backgroundColor: options.backgroundColor || chartColors,
+                borderColor: options.borderColor || '#176b58',
+                borderWidth: options.borderWidth || 0,
+                borderRadius: 5,
+                tension: .35,
+                fill: options.fill || false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: options.indexAxis || 'x',
+            plugins: {
+                legend: { display: options.legend || false, position: 'bottom', labels: { usePointStyle: true, padding: 18 } },
+                tooltip: { displayColors: false }
+            },
+            scales: options.scales || { x: { display: false }, y: { display: false } }
+        }
+    });
+}
+
+makeDashboardChart('borrowing-trends-chart', 'line', dashboardCharts.borrowing_trends, {
+    backgroundColor: 'rgba(23, 107, 88, .12)', borderWidth: 2, fill: true,
+    scales: { x: { grid: { display: false } }, y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#edf1ed' } } }
+});
+makeDashboardChart('request-status-chart', 'doughnut', dashboardCharts.request_status, { legend: true });
+makeDashboardChart('inventory-status-chart', 'doughnut', dashboardCharts.inventory_status, { legend: true });
+makeDashboardChart('most-borrowed-chart', 'bar', dashboardCharts.most_borrowed, {
+    indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#edf1ed' } }, y: { grid: { display: false } } }
+});
+makeDashboardChart('overdue-books-chart', 'bar', dashboardCharts.overdue_books, {
+    indexAxis: 'y', backgroundColor: '#b84b43', scales: { x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#edf1ed' } }, y: { grid: { display: false } } }
+});
+makeDashboardChart('active-members-chart', 'bar', dashboardCharts.active_members, {
+    backgroundColor: '#d8e969', borderColor: '#176b58', scales: { x: { grid: { display: false } }, y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#edf1ed' } } }
+});
+</script>
+{% endif %}
 <section class="content-section">
     <div class="section-heading">
         <div>
