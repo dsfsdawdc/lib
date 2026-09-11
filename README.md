@@ -1,6 +1,6 @@
 # Civic Shelf: Local Public Library Management System
 
-A Flask and MySQL system for public library administration, staff workflows, member registration, catalogue management, borrowing requests, circulation transactions, fines, and audit history.
+A Flask and MySQL system for public library administration, staff workflows, member registration, catalogue management, borrowing requests, circulation transactions, and audit history.
 
 ## Setup
 
