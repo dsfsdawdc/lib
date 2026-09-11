@@ -1,4 +1,5 @@
 from flask import flash, g, jsonify, redirect, render_template, request, url_for
+from mysql.connector.errors import IntegrityError
 
 from .shared import log_audit, paginate_rows, query_db, roles_required
 
@@ -17,14 +18,21 @@ def register(app):
                 flash("Title and ISBN are required.", "error")
             else:
                 total_copies = max(1, int(request.form.get("total_copies", "1") or 1))
-                query_db(
-                    "INSERT INTO books (title, isbn, author_id, publisher_id, shelf_id, publication_year, total_copies, available_copies, status) VALUES (%s, %s, NULLIF(%s, ''), NULLIF(%s, ''), NULLIF(%s, ''), NULLIF(%s, ''), %s, %s, 'available')",
-                    (title, isbn, author_id, request.form.get("publisher_id", ""), request.form.get("shelf_id", ""), request.form.get("publication_year", ""), total_copies, total_copies),
-                    commit=True,
-                )
-                log_audit("create", "book", details=title)
-                flash("Book added.", "success")
-                return redirect(url_for("books"))
+                try:
+                    query_db(
+                        "INSERT INTO books (title, isbn, author_id, publisher_id, shelf_id, publication_year, total_copies, available_copies, status) VALUES (%s, %s, NULLIF(%s, ''), NULLIF(%s, ''), NULLIF(%s, ''), NULLIF(%s, ''), %s, %s, 'available')",
+                        (title, isbn, author_id, request.form.get("publisher_id", ""), request.form.get("shelf_id", ""), request.form.get("publication_year", ""), total_copies, total_copies),
+                        commit=True,
+                    )
+                except IntegrityError as error:
+                    if error.errno == 1062:
+                        flash("A book with this ISBN already exists.", "error")
+                    else:
+                        raise
+                else:
+                    log_audit("create", "book", details=title)
+                    flash("Book added.", "success")
+                    return redirect(url_for("books"))
         search = request.args.get("q", "").strip()
         search_value = f"%{search}%"
         rows = query_db(
@@ -64,13 +72,20 @@ def register(app):
         if request.method == "POST":
             total_copies = max(1, int(request.form.get("total_copies", "1") or 1))
             available_copies = max(0, min(total_copies, int(request.form.get("available_copies", "0") or 0)))
-            query_db(
-                "UPDATE books SET title = %s, isbn = %s, author_id = NULLIF(%s, ''), publisher_id = NULLIF(%s, ''), shelf_id = NULLIF(%s, ''), publication_year = NULLIF(%s, ''), total_copies = %s, available_copies = %s, status = CASE WHEN %s = 0 THEN 'borrowed' ELSE 'available' END WHERE id = %s",
-                (request.form.get("title", "").strip(), request.form.get("isbn", "").strip(), request.form.get("author_id", ""), request.form.get("publisher_id", ""), request.form.get("shelf_id", ""), request.form.get("publication_year", ""), total_copies, available_copies, available_copies, book_id),
-                commit=True,
-            )
-            log_audit("edit", "book", book_id)
-            flash("Book updated.", "success")
+            try:
+                query_db(
+                    "UPDATE books SET title = %s, isbn = %s, author_id = NULLIF(%s, ''), publisher_id = NULLIF(%s, ''), shelf_id = NULLIF(%s, ''), publication_year = NULLIF(%s, ''), total_copies = %s, available_copies = %s, status = CASE WHEN %s = 0 THEN 'borrowed' ELSE 'available' END WHERE id = %s",
+                    (request.form.get("title", "").strip(), request.form.get("isbn", "").strip(), request.form.get("author_id", ""), request.form.get("publisher_id", ""), request.form.get("shelf_id", ""), request.form.get("publication_year", ""), total_copies, available_copies, available_copies, book_id),
+                    commit=True,
+                )
+            except IntegrityError as error:
+                if error.errno == 1062:
+                    flash("A book with this ISBN already exists.", "error")
+                else:
+                    raise
+            else:
+                log_audit("edit", "book", book_id)
+                flash("Book updated.", "success")
             return redirect(url_for("books"))
         book = query_db("SELECT * FROM books WHERE id = %s", (book_id,), fetch_one=True)
         if not book:
